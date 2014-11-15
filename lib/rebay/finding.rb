@@ -43,8 +43,10 @@ module Rebay
     #http://developer.ebay.com/DevZone/finding/CallRef/findItemsByProduct.html
     def find_items_by_product(params)
       raise ArgumentError unless params[:productId]
-      params['productId.@type'] = params[:type] || 'ReferenceID'
+      params['productId.@type'] = params.delete :type
       response = get_json_response(build_request_url('findItemsByProduct', params))
+      require 'binding.pry'
+      binding.pry
       response.trim(:findItemsByProductResponse)
       if response.response.has_key?('searchResult') && response.response['searchResult'].has_key?('item')
         response.results = response.response['searchResult']['item']

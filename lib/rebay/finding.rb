@@ -3,21 +3,21 @@ module Rebay
     def self.base_url_suffix
       "ebay.com/services/search/FindingService/v1"
     end
-    
+
     VERSION = '1.0.0'
-    
+
     #http://developer.ebay.com/DevZone/finding/CallRef/findItemsAdvanced.html
     def find_items_advanced(params)
       raise ArgumentError unless params[:keywords] or params[:categoryId]
       response = get_json_response(build_request_url('findItemsAdvanced', params))
       response.trim(:findItemsAdvancedResponse)
-      
+
       if response.response.has_key?('searchResult') && response.response['searchResult'].has_key?('item')
         response.results = response.response['searchResult']['item']
       end
       return response
     end
-  
+
     #http://developer.ebay.com/DevZone/finding/CallRef/findItemsByCategory.html
     def find_items_by_category(params)
       raise ArgumentError unless params[:categoryId]
@@ -28,7 +28,7 @@ module Rebay
       end
       return response
     end
-  
+
     #http://developer.ebay.com/DevZone/finding/CallRef/findItemsByKeywords.html
     def find_items_by_keywords(params)
       raise ArgumentError unless params[:keywords]
@@ -39,11 +39,11 @@ module Rebay
       end
       return response
     end
-  
+
     #http://developer.ebay.com/DevZone/finding/CallRef/findItemsByProduct.html
     def find_items_by_product(params)
       raise ArgumentError unless params[:productId]
-      params['productId.@type'] = 'ReferenceID'
+      params['productId.@type'] = params[:type] || 'ReferenceID'
       response = get_json_response(build_request_url('findItemsByProduct', params))
       response.trim(:findItemsByProductResponse)
       if response.response.has_key?('searchResult') && response.response['searchResult'].has_key?('item')
@@ -51,7 +51,7 @@ module Rebay
       end
       return response
     end
-  
+
     #http://developer.ebay.com/DevZone/finding/CallRef/findItemsIneBayStores.html
     def find_items_in_ebay_stores(params)
       raise ArgumentError unless params[:keywords] or params[:storeName]
@@ -62,7 +62,7 @@ module Rebay
       end
       return response
     end
-  
+
     #http://developer.ebay.com/DevZone/finding/CallRef/getHistograms.html
     def get_histograms(params)
       raise ArgumentError unless params[:categoryId]

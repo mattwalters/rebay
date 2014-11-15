@@ -1,3 +1,4 @@
+require 'pry'
 module Rebay
   class Finding < Rebay::Api
     def self.base_url_suffix
@@ -45,7 +46,6 @@ module Rebay
       raise ArgumentError unless params[:productId]
       params['productId.@type'] = params.delete :type
       response = get_json_response(build_request_url('findItemsByProduct', params))
-      require 'binding.pry'
       binding.pry
       response.trim(:findItemsByProductResponse)
       if response.response.has_key?('searchResult') && response.response['searchResult'].has_key?('item')
